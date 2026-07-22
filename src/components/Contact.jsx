@@ -3,7 +3,8 @@ import SectionHeader from "./SectionHeader.jsx";
 import { profile } from "../data/profile.js";
 
 const API_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:3000";
+  import.meta.env.VITE_API_URL ||
+  "https://portfolio-website-backend-1-44mf.onrender.com";
 
 const initialForm = {
   name: "",
