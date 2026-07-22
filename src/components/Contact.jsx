@@ -3,7 +3,7 @@ import SectionHeader from "./SectionHeader.jsx";
 import { profile } from "../data/profile.js";
 
 const API_URL =
-  import.meta.env.VITE_API_URL || "https://portfolio-website-backend-9n21.onrender.com";
+  import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export default function Contact() {
   const [form, setForm] = useState({
