@@ -5,27 +5,63 @@ import { profile } from "../data/profile.js";
 const API_URL =
   import.meta.env.VITE_API_URL || "http://localhost:3000";
 
-export default function Contact() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+const initialForm = {
+  name: "",
+  email: "",
+  message: "",
+};
 
-  const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
+const initialStatus = {
+  state: "idle",
+  message: "",
+};
+
+export default function Contact() {
+  const [form, setForm] = useState(initialForm);
+  const [status, setStatus] = useState(initialStatus);
 
   const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const validate = () => {
+    if (form.name.trim().length < 2) {
+      return "Name must be at least 2 characters.";
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      return "Please enter a valid email.";
+    }
+
+    if (form.message.trim().length < 5) {
+      return "Message must be at least 5 characters.";
+    }
+
+    return null;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setLoading(true);
+    const error = validate();
+
+    if (error) {
+      setStatus({
+        state: "error",
+        message: error,
+      });
+      return;
+    }
+
+    setStatus({
+      state: "loading",
+      message: "",
+    });
 
     try {
       const response = await fetch(`${API_URL}/send-email`, {
@@ -38,176 +74,226 @@ export default function Contact() {
 
       const data = await response.json();
 
-      if (data.success) {
-        setSent(true);
-
-        setForm({
-          name: "",
-          email: "",
-          message: "",
-        });
-
-        setTimeout(() => {
-          setSent(false);
-        }, 4000);
-      } else {
-        alert(data.message || "Failed to send message.");
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Failed to send message.");
       }
-    } catch (error) {
-      console.error(error);
-      alert("Server Error. Please try again later.");
-    }
 
-    setLoading(false);
+      setForm(initialForm);
+
+      setStatus({
+        state: "success",
+        message: "Message sent successfully!",
+      });
+    } catch (err) {
+      setStatus({
+        state: "error",
+        message: err.message || "Server Error",
+      });
+    }
   };
 
   return (
-    <section id="contact" className="scroll-mt-24 px-4 py-20 sm:px-8">
-      <div className="mx-auto max-w-6xl">
+    <section
+      id="contact"
+      className="border-b border-line px-5 py-16 sm:px-8"
+    >
+      <div className="mx-auto max-w-5xl">
+
         <SectionHeader
-          title="Get in touch"
-          note="Have a project, a role, or just want to talk? Send me a message."
+          index="05"
+          filename="contact.sh"
+          title="Get In Touch"
         />
 
-        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-          {/* Contact Card */}
-          <div className="rounded-xl border border-line bg-panel overflow-hidden">
-            <div className="flex items-center gap-2 border-b border-line px-5 py-4">
-              <span className="h-3 w-3 rounded-full bg-red-500"></span>
-              <span className="h-3 w-3 rounded-full bg-yellow-400"></span>
-              <span className="h-3 w-3 rounded-full bg-green-500"></span>
+        <div className="grid gap-8 lg:grid-cols-5">
 
-              <span className="ml-3 font-mono text-sm text-muted">
-                contact.sh
-              </span>
-            </div>
+          {/* Left Card */}
 
-            <div className="space-y-4 p-6 font-mono">
+          <div className="lg:col-span-2">
+            <div className="rounded-lg border border-line bg-panel p-5 font-mono text-sm">
+
               <p className="text-muted">
-                <span className="text-green-400">$</span> cat contact.sh
+                # Reach Me
               </p>
 
-              <p>
-                <span className="text-yellow-400">EMAIL</span> =
+              <p className="mt-4">
+                <span className="text-yellow-400">
+                  EMAIL
+                </span>
+
+                <br />
+
                 <a
                   href={`mailto:${profile.email}`}
-                  className="ml-2 text-paper hover:text-teal"
+                  className="text-teal underline"
                 >
                   {profile.email}
                 </a>
               </p>
 
-              <p>
-                <span className="text-yellow-400">PHONE</span> =
-                <a
-                  href={`tel:${profile.phone}`}
-                  className="ml-2 text-paper hover:text-teal"
-                >
-                  {profile.phone}
-                </a>
+              <p className="mt-4">
+                <span className="text-yellow-400">
+                  PHONE
+                </span>
+
+                <br />
+
+                {profile.phone}
               </p>
 
-              <p>
-                <span className="text-yellow-400">LOCATION</span> =
-                <span className="ml-2">{profile.location}</span>
+              <p className="mt-4">
+                <span className="text-yellow-400">
+                  LOCATION
+                </span>
+
+                <br />
+
+                {profile.location}
               </p>
 
-              <p>
-                <span className="text-yellow-400">GITHUB</span> =
+              <p className="mt-4">
+                <span className="text-yellow-400">
+                  GITHUB
+                </span>
+
+                <br />
+
                 <a
                   href={profile.github}
                   target="_blank"
                   rel="noreferrer"
-                  className="ml-2 hover:text-teal"
+                  className="text-paper hover:text-amber"
                 >
                   {profile.github}
                 </a>
               </p>
 
-              <p>
-                <span className="text-yellow-400">LINKEDIN</span> =
+              <p className="mt-4">
+                <span className="text-yellow-400">
+                  LINKEDIN
+                </span>
+
+                <br />
+
                 <a
                   href={profile.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  className="ml-2 hover:text-teal"
+                  className="text-paper hover:text-amber"
                 >
                   {profile.linkedin}
                 </a>
               </p>
+
             </div>
           </div>
 
-          {/* Contact Form */}
-          <form
-            onSubmit={handleSubmit}
-            className="rounded-xl border border-line bg-panel p-8"
-          >
-            <div className="space-y-5">
-              <div>
-                <label className="text-sm font-mono text-muted">
-                  Your Name
-                </label>
+          {/* Right Form */}
 
-                <input
-                  type="text"
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  placeholder="Lokesh Rawat"
-                  required
-                  className="mt-2 w-full rounded-lg border border-line bg-panel2 p-3 outline-none focus:border-yellow-400"
-                />
+          <div className="lg:col-span-3">
+
+            <div className="overflow-hidden rounded-lg border border-line bg-panel">
+
+              <div className="flex items-center gap-2 border-b border-line bg-panel2 px-4 py-3">
+
+                <span className="h-2.5 w-2.5 rounded-full bg-red-500"></span>
+
+                <span className="h-2.5 w-2.5 rounded-full bg-yellow-400"></span>
+
+                <span className="h-2.5 w-2.5 rounded-full bg-green-500"></span>
+
+                <span className="ml-3 font-mono text-xs text-muted">
+                  send-message.sh
+                </span>
+
               </div>
 
-              <div>
-                <label className="text-sm font-mono text-muted">
-                  Your Email
-                </label>
-
-                <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="example@gmail.com"
-                  required
-                  className="mt-2 w-full rounded-lg border border-line bg-panel2 p-3 outline-none focus:border-yellow-400"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm font-mono text-muted">
-                  Message
-                </label>
-
-                <textarea
-                  rows="5"
-                  name="message"
-                  value={form.message}
-                  onChange={handleChange}
-                  placeholder="Write your message..."
-                  required
-                  className="mt-2 w-full resize-none rounded-lg border border-line bg-panel2 p-3 outline-none focus:border-yellow-400"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full rounded-lg bg-amber px-5 py-3 font-semibold text-black transition hover:opacity-90 disabled:opacity-50"
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-4 p-5"
               >
-                {loading ? "Sending..." : "Send Message 🚀"}
-              </button>
 
-              {sent && (
-                <div className="rounded-lg border border-green-600 bg-green-100 p-3 text-center text-green-700">
-                  ✅ Your message has been sent successfully!
+                <div>
+
+                  <label className="block text-xs font-mono text-muted mb-1">
+                    Your Name
+                  </label>
+
+                  <input
+                    type="text"
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="Lokesh Rawat"
+                    className="w-full rounded-md border border-line bg-panel2 px-3 py-3 outline-none focus:border-yellow-400"
+                  />
+
                 </div>
-              )}
+
+                <div>
+
+                  <label className="block text-xs font-mono text-muted mb-1">
+                    Your Email
+                  </label>
+
+                  <input
+                    type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="example@gmail.com"
+                    className="w-full rounded-md border border-line bg-panel2 px-3 py-3 outline-none focus:border-yellow-400"
+                  />
+
+                </div>
+
+                <div>
+
+                  <label className="block text-xs font-mono text-muted mb-1">
+                    Message
+                  </label>
+
+                  <textarea
+                    rows={5}
+                    name="message"
+                    value={form.message}
+                    onChange={handleChange}
+                    placeholder="Write your message..."
+                    className="w-full resize-none rounded-md border border-line bg-panel2 px-3 py-3 outline-none focus:border-yellow-400"
+                  />
+
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={status.state === "loading"}
+                  className="w-full rounded-md bg-amber px-5 py-3 font-semibold text-black hover:opacity-90 disabled:opacity-50"
+                >
+                  {status.state === "loading"
+                    ? "Sending..."
+                    : "Send Message 🚀"}
+                </button>
+
+                {status.state === "success" && (
+                  <div className="rounded-md border border-green-500 bg-green-100 p-3 text-green-700">
+                    ✅ {status.message}
+                  </div>
+                )}
+
+                {status.state === "error" && (
+                  <div className="rounded-md border border-red-500 bg-red-100 p-3 text-red-700">
+                    ❌ {status.message}
+                  </div>
+                )}
+
+              </form>
+
             </div>
-          </form>
+
+          </div>
+
         </div>
+
       </div>
     </section>
   );
