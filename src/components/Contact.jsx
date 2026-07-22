@@ -3,7 +3,7 @@ import SectionHeader from "./SectionHeader.jsx";
 import { profile } from "../data/profile.js";
 
 const API_URL =
-  import.meta.env.VITE_API_URL || "https://portfolio-website-backend-fpn5.onrender.com";
+  import.meta.env.VITE_API_URL || "https://portfolio-website-backend-9n21.onrender.com";
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -84,7 +84,7 @@ export default function Contact() {
 
             <div className="space-y-4 p-6 font-mono">
               <p className="text-muted">
-                <span className="text-green-400">$</span> cat contact
+                <span className="text-green-400">$</span> cat contact.sh
               </p>
 
               <p>
