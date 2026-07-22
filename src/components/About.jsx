@@ -31,7 +31,7 @@ export default function About() {
           </div>
 
           <div className="rounded-xl border border-line bg-panel p-5">
-            <p className="font-mono text-xs text-muted">interests.json</p>
+            <p className="font-mono text-xs text-muted">Interests</p>
             <ul className="mt-4 flex flex-wrap gap-2">
               {interests.map((item) => (
                 <li

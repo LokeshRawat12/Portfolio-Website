@@ -15,31 +15,37 @@ export const profile = {
 
 export const skillGroups = [
   {
-    file: "frontend.css",
+    file: "frontend",
     label: "Frontend",
     accent: "amber",
-    skills: ["HTML5", "CSS3", "JavaScript", "React.js", "React Native", "Tailwind CSS"],
+    skills: ["HTML5", "CSS3", "JavaScript", "React.js", "React Native","Next.js","Tailwind CSS", "Material UI"],
   },
   {
-    file: "backend.js",
+    file: "backend",
     label: "Backend",
     accent: "teal",
     skills: ["Node.js", "Express.js", "REST APIs", "Authentication"],
   },
   {
-    file: "database.sql",
+    file: "database",
     label: "Database",
     accent: "rose",
     skills: ["MongoDB", "PostgreSQL"],
   },
   {
-    file: "tools.json",
-    label: "Tools",
-    accent: "amber",
-    skills: ["Git", "GitHub", "VS Code", "Figma", "npm", "Chrome DevTools"],
+    file: "AI/ML",
+    label: "AI",
+    accent: "rose",
+    skills: ["Python", "Numpy","Pandas",,"Fast API","OpenAI sdk","Langchain", "Pydantic"],
   },
   {
-    file: "concepts.md",
+    file: "tools",
+    label: "Tools",
+    accent: "amber",
+    skills: ["Git", "GitHub", "VS Code", "Figma","Stich", "npm", "Chrome DevTools"],
+  },
+  {
+    file: "concepts",
     label: "Concepts",
     accent: "teal",
     skills: ["Responsive Design", "JSON", "API Integration", "AI API Integration"],
@@ -103,7 +109,7 @@ export const education = {
   degree: "Bachelor of Computer Applications (BCA)",
   period: "2023 – 2026",
   institution: "Shriram Institute of Management and Technology, Kashipur, Uttarakhand",
-  detail: "Expected CGPA: 7.0+",
+  detail: "CGPA: 7.0",
 };
 
 export const interests = [

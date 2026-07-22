@@ -2,6 +2,9 @@ import { useState } from "react";
 import SectionHeader from "./SectionHeader.jsx";
 import { profile } from "../data/profile.js";
 
+const API_URL =
+  import.meta.env.VITE_API_URL || "https://portfolio-website-backend-fpn5.onrender.com";
+
 export default function Contact() {
   const [form, setForm] = useState({
     name: "",
@@ -25,7 +28,7 @@ export default function Contact() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/send-email", {
+      const response = await fetch(`${API_URL}/send-email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,11 +51,11 @@ export default function Contact() {
           setSent(false);
         }, 4000);
       } else {
-        alert("Failed to send message.");
+        alert(data.message || "Failed to send message.");
       }
     } catch (error) {
       console.error(error);
-      alert("Server Error. Make sure your backend is running.");
+      alert("Server Error. Please try again later.");
     }
 
     setLoading(false);
@@ -67,29 +70,21 @@ export default function Contact() {
         />
 
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-
           {/* Contact Card */}
-
           <div className="rounded-xl border border-line bg-panel overflow-hidden">
-
             <div className="flex items-center gap-2 border-b border-line px-5 py-4">
-
               <span className="h-3 w-3 rounded-full bg-red-500"></span>
-
               <span className="h-3 w-3 rounded-full bg-yellow-400"></span>
-
               <span className="h-3 w-3 rounded-full bg-green-500"></span>
 
               <span className="ml-3 font-mono text-sm text-muted">
                 contact.sh
               </span>
-
             </div>
 
             <div className="space-y-4 p-6 font-mono">
-
               <p className="text-muted">
-                <span className="text-green-400">$</span> cat contact.sh
+                <span className="text-green-400">$</span> cat contact
               </p>
 
               <p>
@@ -140,21 +135,16 @@ export default function Contact() {
                   {profile.linkedin}
                 </a>
               </p>
-
             </div>
-
           </div>
 
           {/* Contact Form */}
-
           <form
             onSubmit={handleSubmit}
             className="rounded-xl border border-line bg-panel p-8"
           >
             <div className="space-y-5">
-
               <div>
-
                 <label className="text-sm font-mono text-muted">
                   Your Name
                 </label>
@@ -168,11 +158,9 @@ export default function Contact() {
                   required
                   className="mt-2 w-full rounded-lg border border-line bg-panel2 p-3 outline-none focus:border-yellow-400"
                 />
-
               </div>
 
               <div>
-
                 <label className="text-sm font-mono text-muted">
                   Your Email
                 </label>
@@ -186,11 +174,9 @@ export default function Contact() {
                   required
                   className="mt-2 w-full rounded-lg border border-line bg-panel2 p-3 outline-none focus:border-yellow-400"
                 />
-
               </div>
 
               <div>
-
                 <label className="text-sm font-mono text-muted">
                   Message
                 </label>
@@ -204,7 +190,6 @@ export default function Contact() {
                   required
                   className="mt-2 w-full resize-none rounded-lg border border-line bg-panel2 p-3 outline-none focus:border-yellow-400"
                 />
-
               </div>
 
               <button
@@ -220,10 +205,8 @@ export default function Contact() {
                   ✅ Your message has been sent successfully!
                 </div>
               )}
-
             </div>
           </form>
-
         </div>
       </div>
     </section>
